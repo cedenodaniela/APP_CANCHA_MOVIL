@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ícono: una cancha vista desde arriba, en blanco sobre el verde institucional. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Borde de la cancha -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:pathData="M30,36 L78,36 L78,72 L30,72 Z" />
+    <!-- Línea central -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:pathData="M54,36 L54,72" />
+    <!-- Círculo central -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:pathData="M54,47 A7,7 0 1,1 53.99,47" />
+    <!-- Áreas -->
+    <path
+        android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="3"
+        android:pathData="M30,45 L37,45 L37,63 L30,63 M78,45 L71,45 L71,63 L78,63" />
+</vector>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Textos de la interfaz, en español (app_cancha/AGENTS.md §6). -->
+<resources>
+    <string name="app_name">CanchApp</string>
+
+    <!-- Pantallas provisionales hasta que exista su RF -->
+    <string name="titulo_inicio_sesion">Inicia sesión</string>
+    <string name="titulo_reservar">Reservar</string>
+    <string name="titulo_agenda">Agenda</string>
+    <string name="pendiente_rf">Esta pantalla se construye en %1$s.</string>
+    <string name="accion_salir">Salir</string>
+
+    <!-- Mensajes de respaldo cuando el backend no envía {codigo, mensaje} -->
+    <string name="error_sin_conexion">No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.</string>
+    <string name="error_inesperado">Ocurrió un error inesperado. Inténtalo de nuevo.</string>
+</resources>
