@@ -82,4 +82,11 @@ class LoginContenidoTest {
         assertTrue(ingreso)
         assertTrue(crearCuenta)
     }
+
+    @Test
+    fun dadoQueVieneDelRegistro_cuandoSeMuestra_entoncesConfirmaLaCuenta() {
+        mostrar(EstadoLogin(email = "ana@correo.com", cuentaCreada = true))
+
+        reglaCompose.onNodeWithText("Tu cuenta fue creada. Inicia sesión con tu correo y contraseña.").assertIsDisplayed()
+    }
 }

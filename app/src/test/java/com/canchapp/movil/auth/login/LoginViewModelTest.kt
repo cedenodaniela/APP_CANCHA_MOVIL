@@ -105,4 +105,12 @@ class LoginViewModelTest {
 
         assertNull(viewModel.estado.value.error)
     }
+
+    @Test
+    fun `dado que viene del registro, cuando se muestra, entonces confirma la cuenta y deja el correo`() = runTest(despachador) {
+        viewModel.mostrarCuentaCreada("ana@correo.com")
+
+        assertTrue(viewModel.estado.value.cuentaCreada)
+        assertEquals("ana@correo.com", viewModel.estado.value.email)
+    }
 }

@@ -34,7 +34,11 @@ class AuthRepositoryTest {
     fun preparar() {
         servidor.start()
         coEvery { sesiones.guardar(any()) } returns Unit
-        val json = Json { ignoreUnknownKeys = true }
+        // Misma configuración que core/red/ModuloRed.
+        val json = Json {
+            ignoreUnknownKeys = true
+            explicitNulls = false
+        }
         val api = Retrofit.Builder()
             .baseUrl(servidor.url("/api/v1/"))
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
@@ -84,5 +88,44 @@ class AuthRepositoryTest {
             resultado.exceptionOrNull()!!.aMensajeError(),
         )
         coVerify(exactly = 0) { sesiones.guardar(any()) }
+    }
+
+    @Test
+    fun `dado un registro sin telefono, cuando se envia, entonces llama a usuarios sin ese campo`() = runTest {
+        servidor.enqueue(
+            MockResponse.Builder()
+                .code(201)
+                .body("""{"id":8,"nombre":"Ana","apellido":"Mora","email":"ana@correo.com","telefono":null,"rol":"CLIENTE"}""")
+                .build(),
+        )
+
+        val resultado = repositorio.registrar(SolicitudRegistro("Ana", "Mora", "ana@correo.com", null, "secreta123"))
+
+        assertTrue(resultado.isSuccess)
+        val solicitud = servidor.takeRequest()
+        assertEquals("POST", solicitud.method)
+        assertEquals("/api/v1/usuarios", solicitud.url.encodedPath)
+        assertEquals(
+            """{"nombre":"Ana","apellido":"Mora","email":"ana@correo.com","password":"secreta123"}""",
+            solicitud.body?.utf8(),
+        )
+        coVerify(exactly = 0) { sesiones.guardar(any()) }
+    }
+
+    @Test
+    fun `dado un correo ya registrado, cuando se registra, entonces devuelve el mensaje del backend`() = runTest {
+        servidor.enqueue(
+            MockResponse.Builder()
+                .code(409)
+                .body("""{"codigo":"CORREO_YA_REGISTRADO","mensaje":"Ya existe una cuenta con ese correo."}""")
+                .build(),
+        )
+
+        val resultado = repositorio.registrar(SolicitudRegistro("Ana", "Mora", "ana@correo.com", "0991234567", "secreta123"))
+
+        assertEquals(
+            MensajeError.DelServidor("CORREO_YA_REGISTRADO", "Ya existe una cuenta con ese correo."),
+            resultado.exceptionOrNull()!!.aMensajeError(),
+        )
     }
 }

@@ -6,20 +6,48 @@
     <!-- Pantallas de acceso (pantalla 1, RF-01) -->
     <string name="descripcion_logo">CanchApp: reserva, juega, disfruta</string>
     <string name="lema">Reserva · Juega · Disfruta</string>
-    <string name="titulo_inicio_sesion">Inicia sesión</string>
-    <string name="subtitulo_inicio_sesion">Reserva tu cancha y registra tu pago desde el celular.</string>
     <string name="campo_correo">Correo electrónico</string>
     <string name="ejemplo_correo">tucorreo@ejemplo.com</string>
     <string name="error_correo">Ingresa un correo válido.</string>
     <string name="campo_contrasena">Contraseña</string>
-    <string name="error_contrasena">Ingresa tu contraseña.</string>
     <string name="mostrar_contrasena">Mostrar contraseña</string>
     <string name="ocultar_contrasena">Ocultar contraseña</string>
+
+    <!-- Inicio de sesión -->
+    <string name="titulo_inicio_sesion">Inicia sesión</string>
+    <string name="subtitulo_inicio_sesion">Reserva tu cancha y registra tu pago desde el celular.</string>
+    <string name="error_contrasena">Ingresa tu contraseña.</string>
     <string name="accion_ingresar">Ingresar</string>
     <string name="ingresando">Ingresando…</string>
     <string name="sin_cuenta">¿No tienes cuenta?</string>
     <string name="accion_crear_cuenta">Crear cuenta</string>
+    <string name="cuenta_creada">Tu cuenta fue creada. Inicia sesión con tu correo y contraseña.</string>
+
+    <!-- Registro -->
     <string name="titulo_registro">Crea tu cuenta</string>
+    <string name="subtitulo_registro">Regístrate para reservar tu cancha y registrar tu pago.</string>
+    <string name="campo_nombre">Nombre</string>
+    <string name="error_nombre">Ingresa tu nombre.</string>
+    <string name="campo_apellido">Apellido</string>
+    <string name="error_apellido">Ingresa tu apellido.</string>
+    <string name="campo_telefono">Teléfono (opcional)</string>
+    <string name="ejemplo_telefono">0991234567</string>
+    <plurals name="ayuda_contrasena">
+        <item quantity="one">Al menos %1$d carácter.</item>
+        <item quantity="many">Al menos %1$d caracteres.</item>
+        <item quantity="other">Al menos %1$d caracteres.</item>
+    </plurals>
+    <plurals name="error_contrasena_corta">
+        <item quantity="one">Usa al menos %1$d carácter.</item>
+        <item quantity="many">Usa al menos %1$d caracteres.</item>
+        <item quantity="other">Usa al menos %1$d caracteres.</item>
+    </plurals>
+    <string name="campo_confirmacion">Confirma tu contraseña</string>
+    <string name="error_confirmacion">Las contraseñas no coinciden.</string>
+    <string name="accion_registrarse">Crear cuenta</string>
+    <string name="registrando">Creando cuenta…</string>
+    <string name="con_cuenta">¿Ya tienes cuenta?</string>
+    <string name="accion_iniciar_sesion">Inicia sesión</string>
 
     <!-- Pantallas provisionales hasta que exista su RF -->
     <string name="titulo_reservar">Reservar</string>
