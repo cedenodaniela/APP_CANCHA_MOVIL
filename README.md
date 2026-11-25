@@ -31,6 +31,14 @@ adb shell pm grant com.canchapp.movil android.permission.ACCESS_LOCAL_NETWORK
 
 **Si Android Studio y la terminal compilan a la vez** puede salir `Storage … is already registered`: abre y compila el proyecto siempre desde la misma ruta, sin cambiar mayúsculas en el nombre de las carpetas.
 
+### Recuperación de contraseña
+
+El correo de recuperación trae un enlace `canchapp://restablecer-contrasena?token=…` que abre la app en la pantalla de contraseña nueva. En desarrollo, el backend deja ese correo en Mailpit: ábrelo en el emulador en `http://10.0.2.2:8025` y pulsa el botón. También se puede abrir el enlace a mano:
+
+```bash
+adb shell am start -W -a android.intent.action.VIEW -d "canchapp://restablecer-contrasena?token=EL_TOKEN" com.canchapp.movil
+```
+
 ## Pruebas
 
 ```bash
