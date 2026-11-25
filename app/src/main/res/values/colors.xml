@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Paleta institucional (app_cancha/AGENTS.md §6). En Compose se usa ui/theme/Color.kt. -->
+<resources>
+    <color name="verde">#FF0F6B3E</color>
+    <color name="fondo">#FFF4F6F1</color>
+</resources>

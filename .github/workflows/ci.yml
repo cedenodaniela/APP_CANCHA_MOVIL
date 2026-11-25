@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches: [main, calidad, desarrollo]
+  pull_request:
+    branches: [main, calidad, desarrollo]
+
+jobs:
+  android:
+    name: Lint, pruebas y compilación
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Configurar Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Lint, pruebas unitarias y APK de desarrollo
+        run: ./gradlew --no-daemon lintDebug testDebugUnitTest assembleDebug
+
+      - name: Guardar reportes si algo falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reportes
+          path: app/build/reports/
+
+      # Las pruebas de pantalla (connectedDebugAndroidTest) necesitan un emulador:
+      # se ejecutan en local antes de abrir el Pull Request (app_cancha/AGENTS.md §12).

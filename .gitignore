@@ -1,0 +1,25 @@
+# Gradle y compilación
+.gradle/
+build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+
+# Configuración local (ruta del SDK) y de Android Studio
+local.properties
+.idea/
+*.iml
+.kotlin/
+
+# Secretos: nunca se versionan
+google-services.json
+*.jks
+*.keystore
+keystore.properties
+.env
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
