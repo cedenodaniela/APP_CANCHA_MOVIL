@@ -23,6 +23,14 @@ Desde la terminal:
 
 La versión `debug` apunta a `http://10.0.2.2:8080/api/v1/`, que es el `localhost` de tu computadora visto desde el emulador. Para usar un celular físico, cambia `API_URL` en `app/build.gradle.kts` por la IP de tu computadora en la red local.
 
+**Android 17 (API 37) o superior:** al abrir la app en debug aparece un permiso para acceder a la red local. Hay que **permitirlo**; sin él, el sistema bloquea la conexión al backend local y la app muestra «No se pudo conectar con el servidor». Si se negó, se concede así:
+
+```bash
+adb shell pm grant com.canchapp.movil android.permission.ACCESS_LOCAL_NETWORK
+```
+
+**Si Android Studio y la terminal compilan a la vez** puede salir `Storage … is already registered`: abre y compila el proyecto siempre desde la misma ruta, sin cambiar mayúsculas en el nombre de las carpetas.
+
 ## Pruebas
 
 ```bash
