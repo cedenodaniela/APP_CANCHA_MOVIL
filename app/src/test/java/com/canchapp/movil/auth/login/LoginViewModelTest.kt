@@ -113,4 +113,14 @@ class LoginViewModelTest {
         assertTrue(viewModel.estado.value.cuentaCreada)
         assertEquals("ana@correo.com", viewModel.estado.value.email)
     }
+
+    @Test
+    fun `dado que acaba de crear una contrasena nueva, cuando se muestra, entonces lo confirma hasta que vuelve a ingresar`() = runTest(despachador) {
+        viewModel.mostrarContrasenaRestablecida()
+        assertTrue(viewModel.estado.value.contrasenaRestablecida)
+
+        viewModel.iniciarSesion()
+
+        assertFalse(viewModel.estado.value.contrasenaRestablecida)
+    }
 }

@@ -128,4 +128,51 @@ class AuthRepositoryTest {
             resultado.exceptionOrNull()!!.aMensajeError(),
         )
     }
+
+    @Test
+    fun `dado un correo, cuando pide recuperar la contrasena, entonces devuelve el mensaje del backend`() = runTest {
+        servidor.enqueue(
+            MockResponse.Builder()
+                .code(202)
+                .body("""{"mensaje":"Si el correo está registrado, te enviamos un enlace."}""")
+                .build(),
+        )
+
+        val resultado = repositorio.solicitarRecuperacion("ana@correo.com")
+
+        assertEquals("Si el correo está registrado, te enviamos un enlace.", resultado.getOrNull())
+        val solicitud = servidor.takeRequest()
+        assertEquals("/api/v1/auth/recuperacion", solicitud.url.encodedPath)
+        assertEquals("""{"email":"ana@correo.com"}""", solicitud.body?.utf8())
+    }
+
+    @Test
+    fun `dado un enlace vigente, cuando crea la contrasena nueva, entonces envia el token y no inicia sesion`() = runTest {
+        servidor.enqueue(MockResponse.Builder().code(204).build())
+
+        val resultado = repositorio.restablecerContrasena("token-del-correo", "nueva-clave")
+
+        assertTrue(resultado.isSuccess)
+        val solicitud = servidor.takeRequest()
+        assertEquals("/api/v1/auth/recuperacion/restablecer", solicitud.url.encodedPath)
+        assertEquals("""{"token":"token-del-correo","password":"nueva-clave"}""", solicitud.body?.utf8())
+        coVerify(exactly = 0) { sesiones.guardar(any()) }
+    }
+
+    @Test
+    fun `dado un enlace vencido, cuando crea la contrasena nueva, entonces devuelve el mensaje del backend`() = runTest {
+        servidor.enqueue(
+            MockResponse.Builder()
+                .code(400)
+                .body("""{"codigo":"ENLACE_INVALIDO","mensaje":"El enlace no es válido o ya venció. Solicita uno nuevo."}""")
+                .build(),
+        )
+
+        val resultado = repositorio.restablecerContrasena("viejo", "nueva-clave")
+
+        assertEquals(
+            MensajeError.DelServidor("ENLACE_INVALIDO", "El enlace no es válido o ya venció. Solicita uno nuevo."),
+            resultado.exceptionOrNull()!!.aMensajeError(),
+        )
+    }
 }

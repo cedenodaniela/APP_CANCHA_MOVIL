@@ -1,17 +1,24 @@
 package com.canchapp.movil.auth.login
 
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.canchapp.movil.R
@@ -31,6 +38,7 @@ object EtiquetasLogin {
     const val CORREO = "login_correo"
     const val CONTRASENA = "login_contrasena"
     const val INGRESAR = "login_ingresar"
+    const val OLVIDE = "login_olvide"
 }
 
 /**
@@ -44,9 +52,19 @@ fun LoginScreen(
     alCrearCuenta: () -> Unit,
     correoRegistrado: String? = null,
     alMostrarRegistro: () -> Unit = {},
+    alOlvideContrasena: (email: String) -> Unit = {},
+    contrasenaRestablecida: Boolean = false,
+    alMostrarRestablecida: () -> Unit = {},
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
+
+    LaunchedEffect(contrasenaRestablecida) {
+        if (contrasenaRestablecida) {
+            viewModel.mostrarContrasenaRestablecida()
+            alMostrarRestablecida()
+        }
+    }
 
     LaunchedEffect(correoRegistrado) {
         correoRegistrado?.let { email ->
@@ -62,6 +80,7 @@ fun LoginScreen(
         alAlternarPassword = viewModel::alternarPasswordVisible,
         alIngresar = viewModel::iniciarSesion,
         alCrearCuenta = alCrearCuenta,
+        alOlvideContrasena = { alOlvideContrasena(estado.email.trim()) },
     )
 }
 
@@ -74,6 +93,7 @@ fun LoginContenido(
     alAlternarPassword: () -> Unit,
     alIngresar: () -> Unit,
     alCrearCuenta: () -> Unit,
+    alOlvideContrasena: () -> Unit = {},
 ) {
     val foco = LocalFocusManager.current
     val ingresar = {
@@ -87,6 +107,9 @@ fun LoginContenido(
     ) {
         if (estado.cuentaCreada) {
             Aviso(stringResource(R.string.cuenta_creada), tipo = TipoAviso.EXITO)
+        }
+        if (estado.contrasenaRestablecida) {
+            Aviso(stringResource(R.string.contrasena_restablecida), tipo = TipoAviso.EXITO)
         }
         estado.error?.let { Aviso(textoDe(it)) }
 
@@ -116,6 +139,17 @@ fun LoginContenido(
             habilitado = !estado.cargando,
             acciones = KeyboardActions(onDone = { ingresar() }),
         )
+
+        TextButton(
+            onClick = alOlvideContrasena,
+            enabled = !estado.cargando,
+            modifier = Modifier
+                .align(Alignment.End)
+                .heightIn(min = 48.dp)
+                .testTag(EtiquetasLogin.OLVIDE),
+        ) {
+            Text(stringResource(R.string.olvide_contrasena))
+        }
 
         BotonAcceso(
             texto = stringResource(R.string.accion_ingresar),
