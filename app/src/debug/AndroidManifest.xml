@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Solo en debug. Desde Android 17 (API 37), una app necesita este permiso para conectarse a la red
+  local, y el backend de desarrollo está en 10.0.2.2 (emulador) o en la IP de la computadora
+  (celular físico). En release el backend es un servidor HTTPS público y no hace falta.
+-->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.ACCESS_LOCAL_NETWORK" />
+</manifest>

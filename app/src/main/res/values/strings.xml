@@ -3,8 +3,25 @@
 <resources>
     <string name="app_name">CanchApp</string>
 
-    <!-- Pantallas provisionales hasta que exista su RF -->
+    <!-- Pantallas de acceso (pantalla 1, RF-01) -->
+    <string name="descripcion_logo">CanchApp: reserva, juega, disfruta</string>
+    <string name="lema">Reserva · Juega · Disfruta</string>
     <string name="titulo_inicio_sesion">Inicia sesión</string>
+    <string name="subtitulo_inicio_sesion">Reserva tu cancha y registra tu pago desde el celular.</string>
+    <string name="campo_correo">Correo electrónico</string>
+    <string name="ejemplo_correo">tucorreo@ejemplo.com</string>
+    <string name="error_correo">Ingresa un correo válido.</string>
+    <string name="campo_contrasena">Contraseña</string>
+    <string name="error_contrasena">Ingresa tu contraseña.</string>
+    <string name="mostrar_contrasena">Mostrar contraseña</string>
+    <string name="ocultar_contrasena">Ocultar contraseña</string>
+    <string name="accion_ingresar">Ingresar</string>
+    <string name="ingresando">Ingresando…</string>
+    <string name="sin_cuenta">¿No tienes cuenta?</string>
+    <string name="accion_crear_cuenta">Crear cuenta</string>
+    <string name="titulo_registro">Crea tu cuenta</string>
+
+    <!-- Pantallas provisionales hasta que exista su RF -->
     <string name="titulo_reservar">Reservar</string>
     <string name="titulo_agenda">Agenda</string>
     <string name="pendiente_rf">Esta pantalla se construye en %1$s.</string>

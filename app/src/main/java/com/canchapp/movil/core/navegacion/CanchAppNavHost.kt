@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.canchapp.movil.R
+import com.canchapp.movil.auth.login.LoginScreen
 import com.canchapp.movil.core.sesion.EstadoSesion
 import com.canchapp.movil.ui.componentes.PantallaPendiente
 
@@ -50,7 +51,10 @@ fun CanchAppNavHost(viewModel: NavegacionViewModel = hiltViewModel()) {
 
     NavHost(navController = navController, startDestination = inicio) {
         composable<Destino.InicioSesion> {
-            PantallaPendiente(titulo = stringResource(R.string.titulo_inicio_sesion), requerimiento = "RF-01")
+            LoginScreen(alCrearCuenta = { navController.navigate(Destino.Registro) })
+        }
+        composable<Destino.Registro> {
+            PantallaPendiente(titulo = stringResource(R.string.titulo_registro), requerimiento = "RF-01 (registro)")
         }
         composable<Destino.Reservar> {
             PantallaPendiente(
