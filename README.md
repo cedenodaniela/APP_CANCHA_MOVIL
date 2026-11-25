@@ -45,7 +45,7 @@ adb shell pm grant com.canchapp.movil android.permission.ACCESS_LOCAL_NETWORK
 
 ### Recuperación de contraseña
 
-El correo de recuperación trae un enlace `canchapp://restablecer-contrasena?token=…` que abre la app en la pantalla de contraseña nueva. En desarrollo, el backend deja ese correo en Mailpit: ábrelo en el emulador en `http://10.0.2.2:8025` y pulsa el botón. También se puede abrir el enlace a mano:
+El botón del correo de recuperación lleva a una página del backend con el botón «Abrir CanchApp», que abre la app en la pantalla de contraseña nueva (`canchapp://restablecer-contrasena?token=…`). En desarrollo, con los dos `adb reverse` de arriba, abre Mailpit en el navegador del celular (`http://localhost:8025`), abre el correo y pulsa los dos botones. También se puede abrir el enlace a mano:
 
 ```bash
 adb shell am start -W -a android.intent.action.VIEW -d "canchapp://restablecer-contrasena?token=EL_TOKEN" com.canchapp.movil
