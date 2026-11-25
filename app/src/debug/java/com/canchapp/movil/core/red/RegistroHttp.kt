@@ -2,15 +2,16 @@ package com.canchapp.movil.core.red
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 
 /**
  * Solo en debug: escribe en Logcat las solicitudes y respuestas de la API.
  *
  * - Oculta siempre el encabezado `Authorization`, para que el token no aparezca en los registros.
- * - En las rutas de autenticación (`/auth/…`) no escribe el cuerpo: ahí viajan la contraseña
- *   (login, registro, recuperación) y el token de la respuesta. Cualquier endpoint nuevo que reciba
- *   o devuelva credenciales debe vivir bajo `/auth/`.
+ * - En las rutas con credenciales no escribe el cuerpo: `/auth/…` (login y recuperación, con la
+ *   contraseña y el token) y el registro `POST /usuarios`. Un endpoint nuevo que reciba o devuelva
+ *   credenciales se agrega a [llevaCredenciales].
  */
 object RegistroHttp {
 
@@ -29,8 +30,13 @@ object RegistroHttp {
             redactHeader("Authorization")
         }
         return Interceptor { chain ->
-            val registro = if ("/auth/" in chain.request().url.encodedPath) sinCuerpo else conCuerpo
+            val registro = if (llevaCredenciales(chain.request())) sinCuerpo else conCuerpo
             registro.intercept(chain)
         }
+    }
+
+    private fun llevaCredenciales(solicitud: Request): Boolean {
+        val ruta = solicitud.url.encodedPath
+        return "/auth/" in ruta || (solicitud.method == "POST" && ruta.trimEnd('/').endsWith("/usuarios"))
     }
 }

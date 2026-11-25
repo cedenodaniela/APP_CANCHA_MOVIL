@@ -18,10 +18,27 @@ data class SolicitudLogin(val email: String, val password: String)
 @Serializable
 data class RespuestaLogin(val token: String, val usuario: UsuarioSesion)
 
-/** Endpoints de autenticación del backend (RF-01). */
+/** Cuerpo de `POST /api/v1/usuarios`. El teléfono es opcional: si está vacío no se envía. */
+@Serializable
+data class SolicitudRegistro(
+    val nombre: String,
+    val apellido: String,
+    val email: String,
+    val telefono: String? = null,
+    val password: String,
+)
+
+/** Endpoints de autenticación y registro del backend (RF-01). */
 interface AuthApi {
 
     /** 200 con el token; 401 con «Correo o contraseña incorrectos» si las credenciales fallan. */
     @POST("auth/login")
     suspend fun iniciarSesion(@Body solicitud: SolicitudLogin): RespuestaLogin
+
+    /**
+     * Crea una cuenta de CLIENTE. 201 si se creó; 400 si faltan datos o la contraseña es corta;
+     * 409 si el correo ya está registrado. La app no usa la cuenta devuelta: después inicia sesión.
+     */
+    @POST("usuarios")
+    suspend fun registrar(@Body solicitud: SolicitudRegistro)
 }

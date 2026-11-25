@@ -16,6 +16,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.canchapp.movil.R
 import com.canchapp.movil.auth.login.LoginScreen
+import com.canchapp.movil.auth.registro.RegistroScreen
 import com.canchapp.movil.core.sesion.EstadoSesion
 import com.canchapp.movil.ui.componentes.PantallaPendiente
 
@@ -29,6 +30,9 @@ import com.canchapp.movil.ui.componentes.PantallaPendiente
  * La autorización real la hace el backend en cada endpoint (RNF-02); esto solo evita mostrar
  * pantallas que no corresponden al usuario.
  */
+/** Clave con la que el registro le pasa al login el correo de la cuenta creada. */
+private const val CLAVE_CORREO_REGISTRADO = "correo_registrado"
+
 @Composable
 fun CanchAppNavHost(viewModel: NavegacionViewModel = hiltViewModel()) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
@@ -50,11 +54,25 @@ fun CanchAppNavHost(viewModel: NavegacionViewModel = hiltViewModel()) {
     }
 
     NavHost(navController = navController, startDestination = inicio) {
-        composable<Destino.InicioSesion> {
-            LoginScreen(alCrearCuenta = { navController.navigate(Destino.Registro) })
+        composable<Destino.InicioSesion> { entrada ->
+            // El registro deja aquí el correo de la cuenta creada para confirmarla en el login.
+            val correoRegistrado by entrada.savedStateHandle
+                .getStateFlow<String?>(CLAVE_CORREO_REGISTRADO, null)
+                .collectAsStateWithLifecycle()
+            LoginScreen(
+                alCrearCuenta = { navController.navigate(Destino.Registro) { launchSingleTop = true } },
+                correoRegistrado = correoRegistrado,
+                alMostrarRegistro = { entrada.savedStateHandle[CLAVE_CORREO_REGISTRADO] = null },
+            )
         }
         composable<Destino.Registro> {
-            PantallaPendiente(titulo = stringResource(R.string.titulo_registro), requerimiento = "RF-01 (registro)")
+            RegistroScreen(
+                alCuentaCreada = { email ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set(CLAVE_CORREO_REGISTRADO, email)
+                    navController.popBackStack()
+                },
+                alIniciarSesion = { navController.popBackStack() },
+            )
         }
         composable<Destino.Reservar> {
             PantallaPendiente(

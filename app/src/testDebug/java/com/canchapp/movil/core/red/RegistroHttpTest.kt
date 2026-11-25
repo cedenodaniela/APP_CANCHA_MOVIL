@@ -56,4 +56,12 @@ class RegistroHttpTest {
         assertTrue(registro.contains("\"canchaId\":1"))
         assertFalse(registro.contains("token-secreto"))
     }
+
+    @Test
+    fun `dado un registro de cuenta, cuando se registra, entonces no aparece la contrasena`() {
+        val registro = enviar("/api/v1/usuarios", """{"password":"clave-secreta"}""", """{"id":8}""")
+
+        assertTrue(registro.contains("/api/v1/usuarios"))
+        assertFalse(registro.contains("clave-secreta"))
+    }
 }

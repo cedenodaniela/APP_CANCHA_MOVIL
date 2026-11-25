@@ -8,7 +8,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Inicio de sesión contra el backend (RF-01).
+ * Inicio de sesión y registro contra el backend (RF-01).
  *
  * Si las credenciales son válidas, guarda la sesión cifrada. La navegación observa la sesión,
  * así que no hace falta navegar desde aquí: el cliente pasa a «Reservar» y el administrador a «Agenda».
@@ -20,11 +20,23 @@ class AuthRepository @Inject constructor(
 ) {
 
     /** @return el usuario autenticado, o la falla de red o del backend para mostrarla */
-    suspend fun iniciarSesion(email: String, password: String): Result<UsuarioSesion> =
+    suspend fun iniciarSesion(email: String, password: String): Result<UsuarioSesion> = intentar {
+        val respuesta = api.iniciarSesion(SolicitudLogin(email, password))
+        sesiones.guardar(Sesion(respuesta.token, respuesta.usuario))
+        respuesta.usuario
+    }
+
+    /**
+     * Crea una cuenta de cliente. No inicia sesión: la persona vuelve al login con su correo escrito,
+     * como en el flujo de RF-01.
+     */
+    suspend fun registrar(solicitud: SolicitudRegistro): Result<Unit> = intentar {
+        api.registrar(solicitud)
+    }
+
+    private inline fun <T> intentar(bloque: () -> T): Result<T> =
         try {
-            val respuesta = api.iniciarSesion(SolicitudLogin(email, password))
-            sesiones.guardar(Sesion(respuesta.token, respuesta.usuario))
-            Result.success(respuesta.usuario)
+            Result.success(bloque())
         } catch (cancelada: CancellationException) {
             throw cancelada
         } catch (error: Exception) {
