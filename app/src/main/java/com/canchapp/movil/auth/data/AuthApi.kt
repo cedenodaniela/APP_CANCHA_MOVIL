@@ -28,7 +28,19 @@ data class SolicitudRegistro(
     val password: String,
 )
 
-/** Endpoints de autenticación y registro del backend (RF-01). */
+/** Cuerpo de `POST /api/v1/auth/recuperacion` (RF-02). */
+@Serializable
+data class SolicitudRecuperacion(val email: String)
+
+/** Respuesta de `POST /api/v1/auth/recuperacion`: el texto que se muestra, igual exista o no la cuenta. */
+@Serializable
+data class RespuestaRecuperacion(val mensaje: String)
+
+/** Cuerpo de `POST /api/v1/auth/recuperacion/restablecer` (RF-02). */
+@Serializable
+data class SolicitudRestablecer(val token: String, val password: String)
+
+/** Endpoints de autenticación, registro y recuperación de contraseña del backend (RF-01, RF-02). */
 interface AuthApi {
 
     /** 200 con el token; 401 con «Correo o contraseña incorrectos» si las credenciales fallan. */
@@ -41,4 +53,12 @@ interface AuthApi {
      */
     @POST("usuarios")
     suspend fun registrar(@Body solicitud: SolicitudRegistro)
+
+    /** 202 con el mismo mensaje exista o no la cuenta; 400 solo si el texto no es un correo. */
+    @POST("auth/recuperacion")
+    suspend fun solicitarRecuperacion(@Body solicitud: SolicitudRecuperacion): RespuestaRecuperacion
+
+    /** 204 si cambió; 400 `ENLACE_INVALIDO` si el enlace venció o ya se usó, o si la contraseña es corta. */
+    @POST("auth/recuperacion/restablecer")
+    suspend fun restablecerContrasena(@Body solicitud: SolicitudRestablecer)
 }

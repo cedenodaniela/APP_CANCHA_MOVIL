@@ -21,7 +21,19 @@ Desde la terminal:
 ./gradlew installDebug
 ```
 
-La versión `debug` apunta a `http://10.0.2.2:8080/api/v1/`, que es el `localhost` de tu computadora visto desde el emulador. Para usar un celular físico, cambia `API_URL` en `app/build.gradle.kts` por la IP de tu computadora en la red local.
+La versión `debug` apunta a `http://10.0.2.2:8080/api/v1/`, que es el `localhost` de tu computadora visto desde el emulador.
+
+**En un celular físico**, conectado por USB o con depuración inalámbrica:
+
+1. En `local.properties` (no se versiona) agrega `canchapp.api.url=http://localhost:8080/api/v1/` y vuelve a compilar.
+2. Cada vez que conectes el celular, lleva sus puertos a la computadora:
+
+   ```bash
+   adb reverse tcp:8080 tcp:8080   # la API
+   adb reverse tcp:8025 tcp:8025   # Mailpit, para ver los correos en http://localhost:8025
+   ```
+
+Así el celular usa el backend de tu computadora sin depender de la IP, del firewall ni de abrir HTTP a otras direcciones. Para volver al emulador, borra esa línea de `local.properties`.
 
 **Android 17 (API 37) o superior:** al abrir la app en debug aparece un permiso para acceder a la red local. Hay que **permitirlo**; sin él, el sistema bloquea la conexión al backend local y la app muestra «No se pudo conectar con el servidor». Si se negó, se concede así:
 
@@ -30,6 +42,14 @@ adb shell pm grant com.canchapp.movil android.permission.ACCESS_LOCAL_NETWORK
 ```
 
 **Si Android Studio y la terminal compilan a la vez** puede salir `Storage … is already registered`: abre y compila el proyecto siempre desde la misma ruta, sin cambiar mayúsculas en el nombre de las carpetas.
+
+### Recuperación de contraseña
+
+El botón del correo de recuperación lleva a una página del backend con el botón «Abrir CanchApp», que abre la app en la pantalla de contraseña nueva (`canchapp://restablecer-contrasena?token=…`). En desarrollo, con los dos `adb reverse` de arriba, abre Mailpit en el navegador del celular (`http://localhost:8025`), abre el correo y pulsa los dos botones. También se puede abrir el enlace a mano:
+
+```bash
+adb shell am start -W -a android.intent.action.VIEW -d "canchapp://restablecer-contrasena?token=EL_TOKEN" com.canchapp.movil
+```
 
 ## Pruebas
 

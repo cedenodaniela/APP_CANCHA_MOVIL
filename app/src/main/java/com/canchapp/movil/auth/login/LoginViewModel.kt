@@ -22,6 +22,7 @@ import javax.inject.Inject
  * mientras la persona escribe.
  *
  * @param cuentaCreada la persona acaba de registrarse: se le confirma y se deja su correo escrito
+ * @param contrasenaRestablecida la persona acaba de crear una contraseña nueva con el enlace del correo (RF-02)
  */
 data class EstadoLogin(
     val email: String = "",
@@ -32,6 +33,7 @@ data class EstadoLogin(
     val cargando: Boolean = false,
     val error: MensajeError? = null,
     val cuentaCreada: Boolean = false,
+    val contrasenaRestablecida: Boolean = false,
 )
 
 /**
@@ -61,6 +63,10 @@ class LoginViewModel @Inject constructor(
     fun mostrarCuentaCreada(email: String) =
         _estado.update { EstadoLogin(email = email, cuentaCreada = true) }
 
+    /** Al volver de la contraseña nueva (RF-02): confirma el cambio. */
+    fun mostrarContrasenaRestablecida() =
+        _estado.update { EstadoLogin(email = it.email, contrasenaRestablecida = true) }
+
     fun iniciarSesion() {
         val actual = _estado.value
         if (actual.cargando) return
@@ -69,7 +75,7 @@ class LoginViewModel @Inject constructor(
         val emailInvalido = !esCorreoValido(email)
         val passwordVacia = actual.password.isEmpty()
         _estado.update {
-            it.copy(email = email, emailInvalido = emailInvalido, passwordVacia = passwordVacia, error = null, cuentaCreada = false)
+            it.copy(email = email, emailInvalido = emailInvalido, passwordVacia = passwordVacia, error = null, cuentaCreada = false, contrasenaRestablecida = false)
         }
         if (emailInvalido || passwordVacia) return
 

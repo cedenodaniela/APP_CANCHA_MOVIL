@@ -14,6 +14,14 @@ sealed interface Destino {
     @Serializable
     data object Registro : Destino
 
+    /** Pantalla 1 · «¿Olvidaste tu contraseña?» (RF-02). Llega con el correo escrito en el login. */
+    @Serializable
+    data class Recuperar(val email: String = "") : Destino
+
+    /** Pantalla 1 · Contraseña nueva (RF-02). Se abre desde el enlace del correo, que trae el token. */
+    @Serializable
+    data class Restablecer(val token: String) : Destino
+
     /** Pantalla 2 · Disponibilidad y reserva del cliente (RF-06, RF-07). */
     @Serializable
     data object Reservar : Destino

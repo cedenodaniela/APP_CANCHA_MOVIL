@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -21,8 +23,10 @@ android {
 
     buildTypes {
         debug {
-            // 10.0.2.2 es el localhost de la computadora visto desde el emulador.
-            buildConfigField("String", "API_URL", "\"http://10.0.2.2:8080/api/v1/\"")
+            // Por defecto, 10.0.2.2: el localhost de la computadora visto desde el emulador.
+            // En un celular físico se usa `adb reverse tcp:8080 tcp:8080` y, en local.properties
+            // (no se versiona), canchapp.api.url=http://localhost:8080/api/v1/
+            buildConfigField("String", "API_URL", "\"${urlApiDebug()}\"")
         }
         release {
             // Se reemplaza por la URL HTTPS del backend desplegado (RNF-02).
@@ -88,4 +92,16 @@ dependencies {
     androidTestImplementation(libs.androidx.test.junit)
     // Compose trae una versión vieja de Espresso que falla en Android 17 (InputManager.getInstance).
     androidTestImplementation(libs.androidx.test.espresso)
+}
+
+/**
+ * URL de la API en debug. Se lee de `canchapp.api.url` en local.properties, que no se versiona,
+ * para que cada quien apunte a su backend sin cambiar este archivo. Sin esa clave, el emulador.
+ */
+fun urlApiDebug(): String {
+    val propiedades = Properties()
+    val archivo = rootProject.file("local.properties")
+    if (archivo.exists()) archivo.reader(Charsets.UTF_8).use { propiedades.load(it) }
+    val url = propiedades.getProperty("canchapp.api.url")?.trim().orEmpty()
+    return url.ifEmpty { "http://10.0.2.2:8080/api/v1/" }.let { if (it.endsWith("/")) it else "$it/" }
 }

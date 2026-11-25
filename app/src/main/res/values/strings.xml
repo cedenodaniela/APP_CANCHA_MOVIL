@@ -49,6 +49,23 @@
     <string name="con_cuenta">¿Ya tienes cuenta?</string>
     <string name="accion_iniciar_sesion">Inicia sesión</string>
 
+    <!-- Recuperación de contraseña (RF-02) -->
+    <string name="olvide_contrasena">¿Olvidaste tu contraseña?</string>
+    <string name="contrasena_restablecida">Tu contraseña se cambió. Inicia sesión con la nueva.</string>
+    <string name="titulo_recuperar">Recupera tu contraseña</string>
+    <string name="subtitulo_recuperar">Escribe el correo de tu cuenta y te enviaremos un enlace para crear una contraseña nueva.</string>
+    <string name="ayuda_enlace_recuperacion">Abre el correo en este celular: el enlace abre CanchApp.</string>
+    <string name="accion_enviar_enlace">Enviar enlace</string>
+    <string name="enviando">Enviando…</string>
+    <string name="recorde_contrasena">¿Recordaste tu contraseña?</string>
+    <string name="titulo_restablecer">Crea una contraseña nueva</string>
+    <string name="subtitulo_restablecer">Después inicia sesión con tu correo y la contraseña nueva.</string>
+    <string name="campo_contrasena_nueva">Contraseña nueva</string>
+    <string name="accion_guardar_contrasena">Guardar contraseña</string>
+    <string name="guardando">Guardando…</string>
+    <string name="enlace_vencido">¿El enlace no funciona?</string>
+    <string name="accion_pedir_enlace">Pide uno nuevo</string>
+
     <!-- Pantallas provisionales hasta que exista su RF -->
     <string name="titulo_reservar">Reservar</string>
     <string name="titulo_agenda">Agenda</string>

@@ -34,6 +34,20 @@ class AuthRepository @Inject constructor(
         api.registrar(solicitud)
     }
 
+    /**
+     * Pide el enlace de recuperación (RF-02).
+     *
+     * @return el mensaje del backend, que es el mismo exista o no la cuenta
+     */
+    suspend fun solicitarRecuperacion(email: String): Result<String> = intentar {
+        api.solicitarRecuperacion(SolicitudRecuperacion(email)).mensaje
+    }
+
+    /** Crea la contraseña nueva con el token del enlace del correo (RF-02). No inicia sesión. */
+    suspend fun restablecerContrasena(token: String, password: String): Result<Unit> = intentar {
+        api.restablecerContrasena(SolicitudRestablecer(token, password))
+    }
+
     private inline fun <T> intentar(bloque: () -> T): Result<T> =
         try {
             Result.success(bloque())
