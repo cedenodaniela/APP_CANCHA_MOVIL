@@ -6,9 +6,13 @@ import kotlinx.serialization.Serializable
 /** Destinos de la app (Navigation Compose con rutas tipadas). Se agregan a medida que llega cada RF. */
 sealed interface Destino {
 
-    /** Pantalla 1 · Inicio de sesión y registro (RF-01). */
+    /** Pantalla 1 · Inicio de sesión (RF-01). */
     @Serializable
     data object InicioSesion : Destino
+
+    /** Pantalla 1 · Registro de clientes (RF-01). */
+    @Serializable
+    data object Registro : Destino
 
     /** Pantalla 2 · Disponibilidad y reserva del cliente (RF-06, RF-07). */
     @Serializable
