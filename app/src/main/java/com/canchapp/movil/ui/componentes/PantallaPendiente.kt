@@ -2,6 +2,7 @@ package com.canchapp.movil.ui.componentes
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -26,10 +27,16 @@ import com.canchapp.movil.ui.theme.CanchAppTheme
  *
  * @param requerimiento RF que construirá la pantalla real, por ejemplo «RF-06 y RF-07»
  * @param alSalir si no es nulo, muestra el botón «Salir» que cierra la sesión
+ * @param contenido accesos a pantallas que ya existen, mientras se construye la real
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PantallaPendiente(titulo: String, requerimiento: String, alSalir: (() -> Unit)? = null) {
+fun PantallaPendiente(
+    titulo: String,
+    requerimiento: String,
+    alSalir: (() -> Unit)? = null,
+    contenido: @Composable ColumnScope.() -> Unit = {},
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -49,6 +56,7 @@ fun PantallaPendiente(titulo: String, requerimiento: String, alSalir: (() -> Uni
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Text(stringResource(R.string.pendiente_rf, requerimiento), style = MaterialTheme.typography.bodyLarge)
+            contenido()
             if (alSalir != null) {
                 // Área táctil de al menos 48 dp (RNF-05).
                 Button(onClick = alSalir, modifier = Modifier.heightIn(min = 48.dp)) {
