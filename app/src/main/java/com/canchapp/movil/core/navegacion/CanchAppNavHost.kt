@@ -24,6 +24,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.canchapp.movil.R
 import com.canchapp.movil.admin.ajustes.AjustesScreen
+import com.canchapp.movil.admin.canchas.CanchaFormularioScreen
+import com.canchapp.movil.admin.canchas.CanchasScreen
 import com.canchapp.movil.auth.login.LoginScreen
 import com.canchapp.movil.auth.recuperacion.RecuperarScreen
 import com.canchapp.movil.auth.recuperacion.RestablecerScreen
@@ -160,7 +162,13 @@ fun CanchAppNavHost(
                 requerimiento = "RF-15",
                 alSalir = viewModel::cerrarSesion,
             ) {
-                // Acceso a los ajustes (RF-03) hasta que la agenda real (RF-15) tenga su menú.
+                // Accesos a canchas (RF-04) y ajustes (RF-03) hasta que la agenda real (RF-15) tenga su menú.
+                OutlinedButton(
+                    onClick = { navController.navigate(Destino.Canchas) { launchSingleTop = true } },
+                    modifier = Modifier.heightIn(min = 48.dp),
+                ) {
+                    Text(stringResource(R.string.accion_abrir_canchas))
+                }
                 OutlinedButton(
                     onClick = { navController.navigate(Destino.Ajustes) { launchSingleTop = true } },
                     modifier = Modifier.heightIn(min = 48.dp),
@@ -168,6 +176,21 @@ fun CanchAppNavHost(
                     Text(stringResource(R.string.accion_abrir_ajustes))
                 }
             }
+        }
+        composable<Destino.Canchas> {
+            CanchasScreen(
+                alVolver = { navController.popBackStack() },
+                alNueva = { navController.navigate(Destino.CanchaFormulario()) },
+                alEditar = { id -> navController.navigate(Destino.CanchaFormulario(id)) },
+            )
+        }
+        composable<Destino.CanchaFormulario> { entrada ->
+            val id = entrada.toRoute<Destino.CanchaFormulario>().id
+            CanchaFormularioScreen(
+                id = id.takeIf { it > 0 },
+                alVolver = { navController.popBackStack() },
+                alGuardada = { navController.popBackStack() },
+            )
         }
         composable<Destino.Ajustes> {
             AjustesScreen(alVolver = { navController.popBackStack() })
