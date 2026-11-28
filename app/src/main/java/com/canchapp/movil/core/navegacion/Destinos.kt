@@ -26,6 +26,10 @@ sealed interface Destino {
     @Serializable
     data object Reservar : Destino
 
+    /** Pantalla 10 · Ajustes del complejo, solo del administrador (RF-03). */
+    @Serializable
+    data object Ajustes : Destino
+
     /** Pantalla 7 · Agenda del día del administrador (RF-15). */
     @Serializable
     data object Agenda : Destino

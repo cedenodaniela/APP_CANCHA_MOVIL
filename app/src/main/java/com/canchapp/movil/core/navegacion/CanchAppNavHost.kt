@@ -2,7 +2,10 @@ package com.canchapp.movil.core.navegacion
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -12,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
@@ -19,6 +23,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.canchapp.movil.R
+import com.canchapp.movil.admin.ajustes.AjustesScreen
 import com.canchapp.movil.auth.login.LoginScreen
 import com.canchapp.movil.auth.recuperacion.RecuperarScreen
 import com.canchapp.movil.auth.recuperacion.RestablecerScreen
@@ -154,7 +159,18 @@ fun CanchAppNavHost(
                 titulo = stringResource(R.string.titulo_agenda),
                 requerimiento = "RF-15",
                 alSalir = viewModel::cerrarSesion,
-            )
+            ) {
+                // Acceso a los ajustes (RF-03) hasta que la agenda real (RF-15) tenga su menú.
+                OutlinedButton(
+                    onClick = { navController.navigate(Destino.Ajustes) { launchSingleTop = true } },
+                    modifier = Modifier.heightIn(min = 48.dp),
+                ) {
+                    Text(stringResource(R.string.accion_abrir_ajustes))
+                }
+            }
+        }
+        composable<Destino.Ajustes> {
+            AjustesScreen(alVolver = { navController.popBackStack() })
         }
     }
 }
