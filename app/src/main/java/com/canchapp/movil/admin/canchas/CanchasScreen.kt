@@ -23,7 +23,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.PrimaryTabRow
@@ -60,6 +59,7 @@ import com.canchapp.movil.R
 import com.canchapp.movil.admin.canchas.data.CanchaDto
 import com.canchapp.movil.core.red.MensajeError
 import com.canchapp.movil.ui.componentes.Aviso
+import com.canchapp.movil.ui.componentes.BotonMenu
 import com.canchapp.movil.ui.componentes.textoDe
 import com.canchapp.movil.ui.theme.CanchAppTheme
 import com.canchapp.movil.ui.theme.Verde
@@ -89,7 +89,7 @@ object EtiquetasCanchas {
 /** Pantalla 9 · Canchas del administrador (RF-04), conectada a su ViewModel. */
 @Composable
 fun CanchasScreen(
-    alVolver: () -> Unit,
+    alAbrirMenu: () -> Unit,
     alNueva: () -> Unit,
     alEditar: (id: Long) -> Unit,
     viewModel: CanchasViewModel = hiltViewModel(),
@@ -161,7 +161,7 @@ fun CanchasScreen(
         },
         estado = estado,
         acciones = AccionesCanchas(
-            alVolver = alVolver,
+            alAbrirMenu = alAbrirMenu,
             alNueva = alNueva,
             alEditar = alEditar,
             alReintentar = viewModel::cargar,
@@ -174,7 +174,7 @@ fun CanchasScreen(
 
 /** Lo que la persona puede hacer en la lista de canchas. */
 data class AccionesCanchas(
-    val alVolver: () -> Unit = {},
+    val alAbrirMenu: () -> Unit = {},
     val alNueva: () -> Unit = {},
     val alEditar: (Long) -> Unit = {},
     val alReintentar: () -> Unit = {},
@@ -198,9 +198,7 @@ fun CanchasContenido(
             TopAppBar(
                 title = { Text(stringResource(R.string.titulo_canchas)) },
                 navigationIcon = {
-                    IconButton(onClick = acciones.alVolver) {
-                        Icon(painterResource(R.drawable.ic_atras), contentDescription = stringResource(R.string.accion_volver))
-                    }
+                    BotonMenu(acciones.alAbrirMenu)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,

@@ -69,7 +69,6 @@
     <!-- Ajustes del complejo (pantalla 10, RF-03) -->
     <string name="titulo_ajustes">Ajustes del complejo</string>
     <string name="accion_volver">Volver</string>
-    <string name="accion_abrir_ajustes">Ajustes del complejo</string>
     <string name="cargando_ajustes">Cargando la configuración…</string>
     <string name="accion_reintentar">Reintentar</string>
     <string name="seccion_complejo">Datos del complejo</string>
@@ -102,7 +101,6 @@
 
     <!-- Canchas (pantalla 9, RF-04) -->
     <string name="titulo_canchas">Canchas</string>
-    <string name="accion_abrir_canchas">Canchas</string>
     <string name="accion_nueva_cancha">Nueva cancha</string>
     <string name="titulo_nueva_cancha">Nueva cancha</string>
     <string name="titulo_editar_cancha">Editar cancha</string>
@@ -193,6 +191,18 @@
     <string name="texto_quitar_bloqueo">Esos horarios vuelven a estar disponibles para reservar.</string>
     <string name="accion_quitar">Quitar</string>
     <string name="accion_aceptar">Aceptar</string>
+
+    <!-- Menú del administrador y cierre de sesión (mejora de navegación) -->
+    <string name="menu_abrir">Abrir menú</string>
+    <string name="menu_agenda">Agenda</string>
+    <string name="menu_canchas">Canchas</string>
+    <string name="menu_ajustes">Ajustes del complejo</string>
+    <string name="menu_salir">Salir</string>
+    <string name="rol_administrador">Administrador</string>
+    <string name="titulo_cerrar_sesion">¿Cerrar sesión?</string>
+    <string name="texto_cerrar_sesion">Para volver a entrar tendrás que escribir tu correo y tu contraseña.</string>
+    <string name="accion_si_salir">Sí, salir</string>
+    <string name="accion_no">No</string>
 
     <!-- Pantallas provisionales hasta que exista su RF -->
     <string name="titulo_reservar">Reservar</string>
