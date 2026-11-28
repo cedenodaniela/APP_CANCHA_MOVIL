@@ -100,6 +100,35 @@
     <string name="guardando_cambios">Guardando…</string>
     <string name="cambios_guardados">Cambios guardados.</string>
 
+    <!-- Canchas (pantalla 9, RF-04) -->
+    <string name="titulo_canchas">Canchas</string>
+    <string name="accion_abrir_canchas">Canchas</string>
+    <string name="accion_nueva_cancha">Nueva cancha</string>
+    <string name="titulo_nueva_cancha">Nueva cancha</string>
+    <string name="titulo_editar_cancha">Editar cancha</string>
+    <string name="cargando_canchas">Cargando las canchas…</string>
+    <string name="sin_canchas">Todavía no hay canchas. Agrega la primera con «Nueva cancha».</string>
+    <string name="detalle_cancha">%1$s · %2$d × %3$d m</string>
+    <string name="estado_activa">Activa</string>
+    <string name="estado_inactiva">Inactiva</string>
+    <string name="descripcion_activar_cancha">Activar %1$s</string>
+    <string name="descripcion_desactivar_cancha">Desactivar %1$s</string>
+    <string name="titulo_confirmar_desactivar">¿Desactivar %1$s?</string>
+    <string name="accion_desactivar">Desactivar</string>
+    <string name="accion_cancelar">Cancelar</string>
+    <string name="descripcion_foto_cancha">Foto de %1$s</string>
+    <string name="sin_foto">Sin foto</string>
+    <string name="campo_nombre_cancha">Nombre</string>
+    <string name="campo_tipo_cesped">Tipo de césped</string>
+    <string name="campo_ancho">Ancho (m)</string>
+    <string name="campo_largo">Largo (m)</string>
+    <string name="seccion_foto">Foto</string>
+    <string name="ayuda_foto_cancha">El cliente la ve al elegir la cancha.</string>
+    <string name="accion_tomar_foto">Tomar foto</string>
+    <string name="accion_elegir_galeria">Galería</string>
+    <string name="foto_ilegible">No se pudo leer esa foto. Elige otra.</string>
+    <string name="accion_guardar_cancha">Guardar cancha</string>
+
     <!-- Pantallas provisionales hasta que exista su RF -->
     <string name="titulo_reservar">Reservar</string>
     <string name="titulo_agenda">Agenda</string>

@@ -30,6 +30,14 @@ sealed interface Destino {
     @Serializable
     data object Ajustes : Destino
 
+    /** Pantalla 9 · Canchas del administrador (RF-04). */
+    @Serializable
+    data object Canchas : Destino
+
+    /** Pantalla 9 · Alta o edición de una cancha (RF-04). [id] = 0 es una cancha nueva. */
+    @Serializable
+    data class CanchaFormulario(val id: Long = 0) : Destino
+
     /** Pantalla 7 · Agenda del día del administrador (RF-15). */
     @Serializable
     data object Agenda : Destino
