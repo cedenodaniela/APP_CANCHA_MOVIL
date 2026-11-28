@@ -81,6 +81,10 @@ dependencies {
     debugImplementation(libs.okhttp.logging)
     implementation(libs.kotlinx.serialization.json)
 
+    // Fotos de canchas (RF-04): Coil las carga con el mismo OkHttp de la API, que lleva el JWT.
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.kotlinx.coroutines.test)
