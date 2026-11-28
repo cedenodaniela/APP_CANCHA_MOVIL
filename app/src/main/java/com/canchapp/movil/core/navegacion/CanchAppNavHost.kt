@@ -2,10 +2,7 @@ package com.canchapp.movil.core.navegacion
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -31,7 +28,9 @@ import com.canchapp.movil.auth.recuperacion.RecuperarScreen
 import com.canchapp.movil.auth.recuperacion.RestablecerScreen
 import com.canchapp.movil.auth.registro.RegistroScreen
 import com.canchapp.movil.core.sesion.EstadoSesion
+import com.canchapp.movil.ui.componentes.MenuAdministrador
 import com.canchapp.movil.ui.componentes.PantallaPendiente
+import com.canchapp.movil.ui.componentes.SeccionAdministrador
 
 /**
  * Navegación de la app con protección por rol (RF-01).
@@ -83,6 +82,28 @@ fun CanchAppNavHost(
         tokenRestablecer?.let { token ->
             navController.navigate(Destino.Restablecer(token)) { launchSingleTop = true }
             alUsarToken()
+        }
+    }
+
+    val nombre = (estado as? EstadoSesion.Activa)?.sesion?.usuario?.nombre.orEmpty()
+
+    /**
+     * Cambia de sección desde el menú del administrador. La Agenda es la base: las otras secciones
+     * se abren encima de ella, sin apilarse entre sí, y «atrás» siempre vuelve a la Agenda.
+     */
+    fun irA(seccion: SeccionAdministrador) {
+        val destino: Destino = when (seccion) {
+            SeccionAdministrador.AGENDA -> Destino.Agenda
+            SeccionAdministrador.CANCHAS -> Destino.Canchas
+            SeccionAdministrador.AJUSTES -> Destino.Ajustes
+        }
+        if (destino == Destino.Agenda) {
+            navController.popBackStack<Destino.Agenda>(inclusive = false)
+        } else {
+            navController.navigate(destino) {
+                popUpTo<Destino.Agenda>()
+                launchSingleTop = true
+            }
         }
     }
 
@@ -157,32 +178,22 @@ fun CanchAppNavHost(
             )
         }
         composable<Destino.Agenda> {
-            PantallaPendiente(
-                titulo = stringResource(R.string.titulo_agenda),
-                requerimiento = "RF-15",
-                alSalir = viewModel::cerrarSesion,
-            ) {
-                // Accesos a canchas (RF-04) y ajustes (RF-03) hasta que la agenda real (RF-15) tenga su menú.
-                OutlinedButton(
-                    onClick = { navController.navigate(Destino.Canchas) { launchSingleTop = true } },
-                    modifier = Modifier.heightIn(min = 48.dp),
-                ) {
-                    Text(stringResource(R.string.accion_abrir_canchas))
-                }
-                OutlinedButton(
-                    onClick = { navController.navigate(Destino.Ajustes) { launchSingleTop = true } },
-                    modifier = Modifier.heightIn(min = 48.dp),
-                ) {
-                    Text(stringResource(R.string.accion_abrir_ajustes))
-                }
+            MenuAdministrador(SeccionAdministrador.AGENDA, nombre, ::irA, viewModel::cerrarSesion) { abrirMenu ->
+                PantallaPendiente(
+                    titulo = stringResource(R.string.titulo_agenda),
+                    requerimiento = "RF-15",
+                    alAbrirMenu = abrirMenu,
+                )
             }
         }
         composable<Destino.Canchas> {
-            CanchasScreen(
-                alVolver = { navController.popBackStack() },
-                alNueva = { navController.navigate(Destino.CanchaFormulario()) },
-                alEditar = { id -> navController.navigate(Destino.CanchaFormulario(id)) },
-            )
+            MenuAdministrador(SeccionAdministrador.CANCHAS, nombre, ::irA, viewModel::cerrarSesion) { abrirMenu ->
+                CanchasScreen(
+                    alAbrirMenu = abrirMenu,
+                    alNueva = { navController.navigate(Destino.CanchaFormulario()) },
+                    alEditar = { id -> navController.navigate(Destino.CanchaFormulario(id)) },
+                )
+            }
         }
         composable<Destino.CanchaFormulario> { entrada ->
             val id = entrada.toRoute<Destino.CanchaFormulario>().id
@@ -193,7 +204,9 @@ fun CanchAppNavHost(
             )
         }
         composable<Destino.Ajustes> {
-            AjustesScreen(alVolver = { navController.popBackStack() })
+            MenuAdministrador(SeccionAdministrador.AJUSTES, nombre, ::irA, viewModel::cerrarSesion) { abrirMenu ->
+                AjustesScreen(alAbrirMenu = abrirMenu)
+            }
         }
     }
 }

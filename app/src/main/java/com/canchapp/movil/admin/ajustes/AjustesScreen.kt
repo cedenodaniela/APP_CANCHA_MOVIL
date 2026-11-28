@@ -22,7 +22,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
@@ -55,6 +54,7 @@ import com.canchapp.movil.R
 import com.canchapp.movil.admin.ajustes.AjustesViewModel.Companion.soloDigitos
 import com.canchapp.movil.core.red.MensajeError
 import com.canchapp.movil.ui.componentes.Aviso
+import com.canchapp.movil.ui.componentes.BotonMenu
 import com.canchapp.movil.ui.componentes.TipoAviso
 import com.canchapp.movil.ui.componentes.textoDe
 import com.canchapp.movil.ui.theme.CanchAppTheme
@@ -71,12 +71,12 @@ object EtiquetasAjustes {
 
 /** Pantalla 10 · Ajustes del complejo (RF-03), conectada a su ViewModel. */
 @Composable
-fun AjustesScreen(alVolver: () -> Unit, viewModel: AjustesViewModel = hiltViewModel()) {
+fun AjustesScreen(alAbrirMenu: () -> Unit, viewModel: AjustesViewModel = hiltViewModel()) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
     AjustesContenido(
         estado = estado,
         acciones = AccionesAjustes(
-            alVolver = alVolver,
+            alAbrirMenu = alAbrirMenu,
             alReintentar = viewModel::cargar,
             alEditar = viewModel::editar,
             alGuardar = viewModel::guardar,
@@ -86,7 +86,7 @@ fun AjustesScreen(alVolver: () -> Unit, viewModel: AjustesViewModel = hiltViewMo
 
 /** Lo que la persona puede hacer en los ajustes. */
 data class AccionesAjustes(
-    val alVolver: () -> Unit = {},
+    val alAbrirMenu: () -> Unit = {},
     val alReintentar: () -> Unit = {},
     val alEditar: (FormularioAjustes.() -> FormularioAjustes) -> Unit = {},
     val alGuardar: () -> Unit = {},
@@ -101,9 +101,7 @@ fun AjustesContenido(estado: EstadoAjustes, acciones: AccionesAjustes) {
             TopAppBar(
                 title = { Text(stringResource(R.string.titulo_ajustes)) },
                 navigationIcon = {
-                    IconButton(onClick = acciones.alVolver) {
-                        Icon(painterResource(R.drawable.ic_atras), contentDescription = stringResource(R.string.accion_volver))
-                    }
+                    BotonMenu(acciones.alAbrirMenu)
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
