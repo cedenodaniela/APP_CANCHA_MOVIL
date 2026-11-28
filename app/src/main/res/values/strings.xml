@@ -129,6 +129,71 @@
     <string name="foto_ilegible">No se pudo leer esa foto. Elige otra.</string>
     <string name="accion_guardar_cancha">Guardar cancha</string>
 
+    <!-- Horario, tarifas y bloqueos (pantalla 9, RF-05) -->
+    <string name="pestana_canchas">Canchas</string>
+    <string name="pestana_horario">Horario</string>
+    <string name="pestana_tarifas">Tarifas</string>
+    <string name="pestana_bloqueos">Bloqueos</string>
+    <string-array name="dias_semana">
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miércoles</item>
+        <item>Jueves</item>
+        <item>Viernes</item>
+        <item>Sábado</item>
+        <item>Domingo</item>
+    </string-array>
+    <string-array name="dias_semana_cortos">
+        <item>Lun</item>
+        <item>Mar</item>
+        <item>Mié</item>
+        <item>Jue</item>
+        <item>Vie</item>
+        <item>Sáb</item>
+        <item>Dom</item>
+    </string-array>
+    <string name="ayuda_horario">El horario es el mismo para todas las canchas. Las horas van cada 30 minutos.</string>
+    <string name="estado_abierto">Abierto</string>
+    <string name="estado_cerrado">Cerrado</string>
+    <string name="campo_apertura">Abre</string>
+    <string name="campo_cierre">Cierra</string>
+    <string name="descripcion_abrir_dia">Abrir el %1$s</string>
+    <string name="descripcion_cerrar_dia">Cerrar el %1$s</string>
+    <string name="accion_guardar_horario">Guardar horario</string>
+    <string name="horario_guardado">Horario guardado.</string>
+    <string name="ayuda_tarifas">Cada bloque de 30 minutos cuesta la mitad del precio por hora de su franja.</string>
+    <string name="sin_tarifas">No hay tarifas. Agrega una para poder cobrar las reservas.</string>
+    <string name="accion_nueva_tarifa">Nueva tarifa</string>
+    <string name="titulo_nueva_tarifa">Nueva tarifa</string>
+    <string name="titulo_editar_tarifa">Editar tarifa</string>
+    <string name="todos_los_dias">Todos los días</string>
+    <string name="rango_horas">%1$s a %2$s</string>
+    <string name="precio_por_hora">$%1$s por hora</string>
+    <string name="campo_dias">Días</string>
+    <string name="campo_desde">Desde</string>
+    <string name="campo_hasta">Hasta</string>
+    <string name="campo_precio_hora">Precio por hora ($)</string>
+    <string name="accion_guardar">Guardar</string>
+    <string name="accion_editar">Editar</string>
+    <string name="accion_eliminar">Eliminar</string>
+    <string name="titulo_eliminar_tarifa">¿Eliminar esta tarifa?</string>
+    <string name="texto_eliminar_tarifa">Las reservas ya hechas conservan su precio.</string>
+    <string name="ayuda_bloqueos">Los horarios bloqueados no se ofrecen al cliente.</string>
+    <string name="sin_bloqueos">No hay bloqueos de hoy en adelante.</string>
+    <string name="accion_nuevo_bloqueo">Nuevo bloqueo</string>
+    <string name="titulo_nuevo_bloqueo">Nuevo bloqueo</string>
+    <string name="todas_las_canchas">Todas las canchas</string>
+    <string name="campo_cancha">Cancha</string>
+    <string name="campo_fecha">Fecha</string>
+    <string name="campo_motivo">Motivo</string>
+    <string name="ejemplo_motivo">Ej.: mantenimiento del césped</string>
+    <string name="accion_bloquear">Bloquear</string>
+    <string name="titulo_confirmar_bloqueo">¿Bloquear de todos modos?</string>
+    <string name="titulo_quitar_bloqueo">¿Quitar este bloqueo?</string>
+    <string name="texto_quitar_bloqueo">Esos horarios vuelven a estar disponibles para reservar.</string>
+    <string name="accion_quitar">Quitar</string>
+    <string name="accion_aceptar">Aceptar</string>
+
     <!-- Pantallas provisionales hasta que exista su RF -->
     <string name="titulo_reservar">Reservar</string>
     <string name="titulo_agenda">Agenda</string>

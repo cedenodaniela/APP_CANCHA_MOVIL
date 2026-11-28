@@ -1,5 +1,6 @@
 package com.canchapp.movil.admin.canchas
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -25,6 +26,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
@@ -35,6 +38,9 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,9 +63,23 @@ import com.canchapp.movil.ui.componentes.Aviso
 import com.canchapp.movil.ui.componentes.textoDe
 import com.canchapp.movil.ui.theme.CanchAppTheme
 import com.canchapp.movil.ui.theme.Verde
+import java.time.LocalDate
+import java.time.ZoneId
+
+/** Pestañas de la pantalla 9: canchas (RF-04), y horario, tarifas y bloqueos (RF-05). */
+enum class PestanaCanchas(@StringRes val titulo: Int) {
+    CANCHAS(R.string.pestana_canchas),
+    HORARIO(R.string.pestana_horario),
+    TARIFAS(R.string.pestana_tarifas),
+    BLOQUEOS(R.string.pestana_bloqueos),
+}
+
+/** Zona del complejo: «hoy» para los bloqueos es el de Calceta, no el del celular. */
+private val ZONA_COMPLEJO: ZoneId = ZoneId.of("America/Guayaquil")
 
 /** Etiquetas para las pruebas de pantalla. */
 object EtiquetasCanchas {
+    fun pestana(p: PestanaCanchas) = "canchas_pestana_${p.name}"
     const val NUEVA = "canchas_nueva"
     const val REINTENTAR = "canchas_reintentar"
     fun estado(id: Long) = "canchas_estado_$id"
@@ -73,13 +93,72 @@ fun CanchasScreen(
     alNueva: () -> Unit,
     alEditar: (id: Long) -> Unit,
     viewModel: CanchasViewModel = hiltViewModel(),
+    horarioVm: HorarioViewModel = hiltViewModel(),
+    tarifasVm: TarifasViewModel = hiltViewModel(),
+    bloqueosVm: BloqueosViewModel = hiltViewModel(),
 ) {
     val estado by viewModel.estado.collectAsStateWithLifecycle()
+    var pestana by rememberSaveable { mutableStateOf(PestanaCanchas.CANCHAS) }
 
-    // Cada vez que vuelve del formulario, la lista se actualiza.
-    LaunchedEffect(Unit) { viewModel.cargar() }
+    // Cada vez que se abre una pestaña (o se vuelve del formulario), se actualiza.
+    LaunchedEffect(pestana) {
+        when (pestana) {
+            PestanaCanchas.CANCHAS -> viewModel.cargar()
+            PestanaCanchas.HORARIO -> horarioVm.cargar()
+            PestanaCanchas.TARIFAS -> tarifasVm.cargar()
+            PestanaCanchas.BLOQUEOS -> bloqueosVm.cargar()
+        }
+    }
 
     CanchasContenido(
+        pestana = pestana,
+        alCambiarPestana = { pestana = it },
+        otraPestana = { actual ->
+            when (actual) {
+                PestanaCanchas.HORARIO -> {
+                    val e by horarioVm.estado.collectAsStateWithLifecycle()
+                    HorarioSeccion(e, horarioVm::editarDia, horarioVm::guardar, horarioVm::cargar)
+                }
+                PestanaCanchas.TARIFAS -> {
+                    val e by tarifasVm.estado.collectAsStateWithLifecycle()
+                    TarifasSeccion(
+                        e,
+                        AccionesTarifas(
+                            alReintentar = tarifasVm::cargar,
+                            alNueva = tarifasVm::nueva,
+                            alEditar = tarifasVm::editarTarifa,
+                            alCambiarFormulario = tarifasVm::editar,
+                            alGuardar = tarifasVm::guardar,
+                            alCerrar = tarifasVm::cerrarFormulario,
+                            alPedirEliminar = tarifasVm::pedirEliminar,
+                            alConfirmarEliminar = tarifasVm::confirmarEliminar,
+                            alCancelarEliminar = tarifasVm::cancelarEliminar,
+                        ),
+                    )
+                }
+                PestanaCanchas.BLOQUEOS -> {
+                    val e by bloqueosVm.estado.collectAsStateWithLifecycle()
+                    val hoy = LocalDate.now(ZONA_COMPLEJO)
+                    BloqueosSeccion(
+                        e,
+                        AccionesBloqueos(
+                            alReintentar = bloqueosVm::cargar,
+                            alNuevo = { bloqueosVm.nuevo(hoy) },
+                            alCambiarFormulario = bloqueosVm::editar,
+                            alGuardar = bloqueosVm::guardar,
+                            alCerrar = bloqueosVm::cerrarFormulario,
+                            alConfirmar = bloqueosVm::confirmar,
+                            alCancelarConfirmacion = bloqueosVm::cancelarConfirmacion,
+                            alPedirEliminar = bloqueosVm::pedirEliminar,
+                            alConfirmarEliminar = bloqueosVm::confirmarEliminar,
+                            alCancelarEliminar = bloqueosVm::cancelarEliminar,
+                        ),
+                        hoy,
+                    )
+                }
+                PestanaCanchas.CANCHAS -> Unit
+            }
+        },
         estado = estado,
         acciones = AccionesCanchas(
             alVolver = alVolver,
@@ -107,7 +186,13 @@ data class AccionesCanchas(
 /** Lista de canchas sin estado propio: se prueba y se previsualiza con cualquier [EstadoCanchas]. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CanchasContenido(estado: EstadoCanchas, acciones: AccionesCanchas) {
+fun CanchasContenido(
+    estado: EstadoCanchas,
+    acciones: AccionesCanchas,
+    pestana: PestanaCanchas = PestanaCanchas.CANCHAS,
+    alCambiarPestana: (PestanaCanchas) -> Unit = {},
+    otraPestana: @Composable (PestanaCanchas) -> Unit = {},
+) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -125,7 +210,7 @@ fun CanchasContenido(estado: EstadoCanchas, acciones: AccionesCanchas) {
             )
         },
         floatingActionButton = {
-            ExtendedFloatingActionButton(
+            if (pestana == PestanaCanchas.CANCHAS) ExtendedFloatingActionButton(
                 onClick = acciones.alNueva,
                 icon = { Icon(painterResource(R.drawable.ic_agregar), contentDescription = null) },
                 text = { Text(stringResource(R.string.accion_nueva_cancha)) },
@@ -133,13 +218,27 @@ fun CanchasContenido(estado: EstadoCanchas, acciones: AccionesCanchas) {
             )
         },
     ) { relleno ->
-        Box(
+        Column(
             Modifier
                 .fillMaxSize()
                 .padding(relleno),
+        ) {
+        PrimaryTabRow(selectedTabIndex = pestana.ordinal) {
+            PestanaCanchas.entries.forEach { p ->
+                Tab(
+                    selected = pestana == p,
+                    onClick = { alCambiarPestana(p) },
+                    text = { Text(stringResource(p.titulo)) },
+                    modifier = Modifier.testTag(EtiquetasCanchas.pestana(p)),
+                )
+            }
+        }
+        Box(
+            Modifier.fillMaxSize(),
             contentAlignment = Alignment.TopCenter,
         ) {
             when {
+                pestana != PestanaCanchas.CANCHAS -> otraPestana(pestana)
                 estado.cargando -> Column(
                     Modifier.padding(32.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
@@ -164,6 +263,7 @@ fun CanchasContenido(estado: EstadoCanchas, acciones: AccionesCanchas) {
                 }
                 else -> Lista(estado, acciones)
             }
+        }
         }
     }
 
