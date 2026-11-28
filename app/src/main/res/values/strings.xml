@@ -192,6 +192,15 @@
     <string name="accion_quitar">Quitar</string>
     <string name="accion_aceptar">Aceptar</string>
 
+    <!-- Disponibilidad del cliente (pantalla 2, RF-06) -->
+    <string name="titulo_disponibilidad">Disponibilidad</string>
+    <string name="selector_cancha">Cancha</string>
+    <string name="selector_fecha">Fecha</string>
+    <string name="cargando_disponibilidad">Consultando la disponibilidad…</string>
+    <string name="sin_disponibilidad">No hay horarios disponibles para esta fecha.</string>
+    <string name="libre">Libre</string>
+    <string name="ocupado">Ocupado</string>
+
     <!-- Menú del administrador y cierre de sesión (mejora de navegación) -->
     <string name="menu_abrir">Abrir menú</string>
     <string name="menu_agenda">Agenda</string>

@@ -27,6 +27,7 @@ import com.canchapp.movil.auth.login.LoginScreen
 import com.canchapp.movil.auth.recuperacion.RecuperarScreen
 import com.canchapp.movil.auth.recuperacion.RestablecerScreen
 import com.canchapp.movil.auth.registro.RegistroScreen
+import com.canchapp.movil.cliente.reservar.DisponibilidadScreen
 import com.canchapp.movil.core.sesion.EstadoSesion
 import com.canchapp.movil.ui.componentes.MenuAdministrador
 import com.canchapp.movil.ui.componentes.PantallaPendiente
@@ -171,11 +172,7 @@ fun CanchAppNavHost(
             )
         }
         composable<Destino.Reservar> {
-            PantallaPendiente(
-                titulo = stringResource(R.string.titulo_reservar),
-                requerimiento = "RF-06 y RF-07",
-                alSalir = viewModel::cerrarSesion,
-            )
+            DisponibilidadScreen(alSalir = viewModel::cerrarSesion)
         }
         composable<Destino.Agenda> {
             MenuAdministrador(SeccionAdministrador.AGENDA, nombre, ::irA, viewModel::cerrarSesion) { abrirMenu ->
